@@ -72,6 +72,16 @@
   \predate{}\postdate{}
 
 
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
 % This file contains all of the LaTeX packages you may need to compile the document
 % Documentation for each package can be found onlines
 \usepackage{tabularx}                                             % table environment providing flexibility
@@ -108,16 +118,6 @@
 
 \definecolor{light-gray}{gray}{.85}
 %\usepackage[tagged]{accessibility-meta}
-
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
 
 \begin{document}
 \maketitle
@@ -164,6 +164,12 @@ You can use any file extension, including PDFs
 \caption{Here's my caption \label{fig:fig_example}}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics{./Figures/RMarkdownFLow1.png}
+\caption{Here's my caption 2\label{fig:fig_example}}
+\end{figure}
+
 Figures are referenced using LaTeX syntax \ref{fig:fig_example}.
 
 Put a space between the {]} and ( above. Knit the document.
@@ -175,18 +181,68 @@ referencing it.
 
 You can embed an R code chunk like this:
 
+\begin{verbatim}
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+\end{verbatim}
+
 Play witht the r code chunk options, echo=TRUE, include=FALSE,
 results=`asis'
+
+\FloatBarrier
 
 \section{Figure from R code chunk}\label{figure-from-r-code-chunk}
 
 You can also embed plots, for example:
 
+\begin{figure}[htbp]
+\centering
+\includegraphics{4-Workshop_examples_files/figure-latex/pressure-1.pdf}
+\caption{Figure of something at \(40^\circ 10^\prime\).
+\label{fig:pressure}}
+\end{figure}
+
 Note, you need extra \textbackslash{}s when using LaTeX syntax within an
 R code chunk, or when inserting a backslash in R markdown. The same goes
-with percent signs and any other LaTeX reserved symbol.
+with percent signs and any other LaTeX reserved symbol. You can use a \%
+in line without dollar signs, if in math mode you need dollar signs. ex:
+\(\%\)
+
+This is inline math mode for Latex \(40^\circ 10^\prime\)
+
+We can now reference Figure \ref{fig:pressure}. Note where this text
+ends up.
+
+Note that the \texttt{echo\ =\ FALSE} parameter was added to the code
+chunk to prevent printing of the R code that generated the plot.
+
+\FloatBarrier
 
 \section{Tables}\label{tables}
+
+\begin{table}[ht]
+\centering
+\caption{This is where you write your caption} 
+\label{tab:Table_example}
+\scalebox{0.7}{
+\begin{tabular}{rrrrrrrrrrr}
+  \hline
+Sample & Test1 & Test2 & Test3 & Test4 & Test5 & Test6 & Test7 & Test8 & Test9 & Test10 \\ 
+  \hline
+  1 & 333000000000.00 & 97.00 &  45 & 7169 & 5656 & 2642 & 8534 & 9173.00 & 230 & 2733 \\ 
+    3 & 345.00 & 976.00 &   6 & 105 & 6382 & 2277 & 5848 & 7339495403.00 & 8613 & 5025 \\ 
+    5 & 34.00 & 3333333333.00 &   7 & 2395 & 5632 & 5542 & 1645 & 380.00 & 1263 & 6728 \\ 
+    7 & 234.00 & 34.00 &  46 & 5619 & 6063 & 8973 & 9362 & 1870.00 & 7651 & 683 \\ 
+    9 & 234.00 & 0.00 &  45 & 6531 & 6824 & 3609 & 7627 & 3363.00 & 1534 & 8333 \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
 
 Try changing the R chunk options above.
 
@@ -201,7 +257,41 @@ computer.
 
 Now, create a table!
 
+\begin{table}[ht]
+\centering
+\caption{This is da caption.} 
+\label{tab:Table_example2}
+\scalebox{0.7}{
+\begin{tabular}{lll}
+  \hline
+X & Size & Color \\ 
+  \hline
+Lee CF & XL & Maroon \\ 
+  Kristin PJ & M & Dark Green \\ 
+  Lukas DF & L & Light Blue \\ 
+  Thomas B & S & Maroon \\ 
+  Kaija K & S & Light Blue \\ 
+  Zack O & M & Dark Green \\ 
+  Zach K & M & Lavender \\ 
+  Kate R & S & Light Blue \\ 
+  Jon S & L & Purple \\ 
+  Melissa K & M & Light Blue \\ 
+   \hline
+\end{tabular}
+}
+\end{table}
+
 \section{Math mode}\label{math-mode}
+
+You can use LaTeX math mode both inline and for inserting equations.
+It's handy for using inline math mode for management measure and
+lat/long.
+
+Inline looks like this: \(SPR_{40\%}\)\\
+*Note the \% sign has a ~when used in math mode, but not in R markdown
+text.
+
+To get degrees and minutes type: \(40^\circ 10^\prime\)
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}

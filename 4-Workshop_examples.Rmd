@@ -23,10 +23,10 @@ link-citations: yes
     # set global options for R code chunks: echo=FALSE (don't include source code); 
     # warning=FALSE (suppress R warnings); message=FALSE (suppress R messages)
     # eval = TRUE is default
-    # knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+    knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
       library(xtable)
-    # options(xtable.comment = FALSE)  # turns off xtable comments
+      options(xtable.comment = FALSE)  # turns off xtable comments
 ```
 
 Change some of the YAML settings to see what happens.
@@ -108,6 +108,8 @@ You can use any file extension, including PDFs
 
 ![Here's my caption \label{fig:fig_example}](RMarkdownFLow.png)
 
+![Here's my caption 2\label{fig:fig_example}](./Figures/RMarkdownFLow1.png)
+
 Figures are referenced using LaTeX syntax \ref{fig:fig_example}.
 
 Put a space between the ] and ( above. Knit the document.  
@@ -121,7 +123,7 @@ Now try adding your own picture to the directory, adding it in here, and referen
 
 You can embed an R code chunk like this:
 
-```{r cars, echo=FALSE, include=F}
+```{r cars}
 summary(cars)
 ```
 
@@ -130,31 +132,34 @@ Play witht the r code chunk options, echo=TRUE, include=FALSE, results='asis'
 
 
 
+\FloatBarrier
 
 
 # Figure from R code chunk
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE, include=FALSE, fig.cap="Figure of something  at $40^\\circ 10^\\prime$. \\label{fig:pressure}"}
+```{r pressure, fig.cap="Figure of something  at $40^\\circ 10^\\prime$. \\label{fig:pressure}"}
 plot(pressure)
 ```
 
-Note, you need extra \\s when using LaTeX syntax within an R code chunk, or when inserting a backslash in R markdown.  The same goes with percent signs and any other LaTeX reserved symbol.
+Note, you need extra \\s when using LaTeX syntax within an R code chunk, or when inserting a backslash in R markdown.  The same goes with percent signs and any other LaTeX reserved symbol. You can use a % in line without dollar signs, if in math mode you need dollar signs. ex: $\%$
 
 
+This is inline math mode for Latex $40^\circ 10^\prime$
 
-<!--
+
 We can now reference Figure \ref{fig:pressure}.  Note where this text ends up.
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
--->
+
+\FloatBarrier
 
 
 #Tables
 
-```{r, results='asis', echo=FALSE, include=FALSE}
+```{r, results='asis'}
 #, results='asis', echo=FALSE, include=FALSE, message=FALSE, warning=FALSE
 Tab = read.csv('Table_example.csv')
 
@@ -162,10 +167,21 @@ Tab_example = xtable(Tab,
                    caption=c('This is where you write your caption'),
                    label = 'tab:Table_example')
 
-print(Tab_example, include.rownames = FALSE, caption.placement = 'top')
+print(Tab_example, include.rownames = FALSE, caption.placement = 'top', scalebox=.7)
+
+# Use subargument digits=how ever many digits you want to give it and it will apply this
+# to the entire table; you can give the digits subargument a vector and give it a zero for columns
+# like years! yay.
+
+# Arni trick: use vector of the data that uses an argument to count the digits and then use an if statement to tell it what to give digits...I think
 
 # print option to try, scalebox = 0.7
 # add alignment
+align(Tab_example) = "lcrcrcrcrcrl"
+
+# you'll always need ncol + 1 cuz it includes rownames
+
+# If latex can't find a table you call it will place ?? where the table should go so you can ctrl find errors
 
 
 ```
@@ -184,12 +200,19 @@ Now, try putting the R code chunk within and HTML comment.
 Either create a .csv file or copy one into the repo folder on your computer.
 
 Now, create a table!
+```{r, results='asis'}
+Tab2 = read.csv("admb_tshirts.csv")
 
+Tab_example2 = xtable(Tab2, 
+                      caption=c("This is da caption."),
+                      label="tab:Table_example2")
 
+print(Tab_example2, include.rownames = FALSE, caption.placement = 'top', scalebox=.7)
 
+```
 
 #Math mode
- <!--
+
 You can use LaTeX math mode both inline and for inserting equations. It's handy for using inline math mode for management measure and lat/long.
 
 Inline looks like this:  $SPR_{40\%}$  
@@ -197,7 +220,7 @@ Inline looks like this:  $SPR_{40\%}$
 
 To get degrees and minutes type: $40^\circ 10^\prime$   
 
--->
+
 
 #References
 
